@@ -2,13 +2,25 @@ from django.shortcuts import render
 from basket.models import Player
 from basket.forms import PlayerForm
 from django.shortcuts import redirect
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def index(request):
     data = {}
 
     # SELECT * FROM player
-    data['object_list'] = Player.objects.all().order_by('-id')
+    object_list = Player.objects.all().order_by('-id')
+
+    paginator = Paginator(object_list, 10)
+    page = request.GET.get('page')
+
+    try:
+        data['object_list'] = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        data['object_list'] = paginator.page(1)
+    except EmptyPage:
+        data['object_list'] = paginator.page(paginator.num_pages)
 
     template_name = 'player/list_player.html'
     return render(request, template_name, data)
