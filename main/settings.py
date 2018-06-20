@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'basket',
+    'jquery',
     'auth_basket',
     'autofixture',
     'bootstrap4'
